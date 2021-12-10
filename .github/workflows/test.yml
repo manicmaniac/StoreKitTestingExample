@@ -1,0 +1,14 @@
+name: Test
+on: [push]
+jobs:
+  test:
+    runs-on: macOS-11
+    env:
+      DEVELOPER_DIR: "/Applications/Xcode_13.1.app/Contents/Developer"
+    steps:
+      - uses: actions/checkout@v2
+      - run: ./Scripts/run-test
+      - uses: actions/upload-artifact@v2
+        with:
+          name: StoreKitTestingExample-${{ github.run_id }}-${{ github.run_number }}
+          path: result
