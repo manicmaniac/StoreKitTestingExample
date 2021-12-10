@@ -1,0 +1,49 @@
+{
+  "identifier" : "8DF14D5F",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+
+  ],
+  "settings" : {
+
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "51154BEF",
+      "localizations" : [
+
+      ],
+      "name" : "default",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "displayPrice" : "0.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "CB208006",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "",
+              "displayName" : "",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.example.auto-renewable",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "auto-renewable",
+          "subscriptionGroupID" : "51154BEF",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 1,
+    "minor" : 1
+  }
+}
