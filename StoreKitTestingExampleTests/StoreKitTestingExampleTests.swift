@@ -15,12 +15,9 @@ class StoreKitTestingExampleTests: XCTestCase {
 
     override func setUpWithError() throws {
         session = try SKTestSession(configurationFileNamed: "Default")
+        session.clearTransactions()
+        session.resetToDefaultState()
         session.disableDialogs = true
-    }
-
-    override func tearDown() {
-        session?.clearTransactions()
-        session?.resetToDefaultState()
     }
 
     func testRequestProducts() {
