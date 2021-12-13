@@ -3,7 +3,7 @@
 RESULT_BUNDLE_PATH=result/StoreKitTestingExampleTests.xcresult
 rm -r "$RESULT_BUNDLE_PATH"
 mkdir -p result
-log stream --predicate 'category = "StoreKitInXcode"' --level debug > result/StoreKitInXcode.log &
+log stream --predicate 'subsystem = "com.apple.appstored"' --level debug > result/StoreKitInXcode.log &
 trap "kill -2 $!" EXIT
 xcodebuild test \
     -project StoreKitTestingExample.xcodeproj \
