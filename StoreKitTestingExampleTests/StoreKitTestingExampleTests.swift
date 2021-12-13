@@ -76,8 +76,7 @@ class StoreKitTestingExampleTests: XCTestCase {
         paymentQueue.add(paymentTransactionObserver)
         paymentQueue.add(payment)
         waitForExpectations(timeout: 5)
-        XCTAssertTrue((1...2) ~= transactionStates.count)
-        XCTAssertEqual(transactionStates.last, .purchased)
+        XCTAssertEqual(transactionStates, [.purchasing, .purchased])
     }
 }
 
