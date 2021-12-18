@@ -20,10 +20,6 @@ class StoreKitTestingExampleTests: XCTestCase {
         session.disableDialogs = true
     }
 
-    override func tearDownWithError() throws {
-        try session.expireSubscription(productIdentifier: "com.example.auto-renewable")
-    }
-
     func testRequestProducts() {
         let expectation = self.expectation(description: "SKProductsRequest should finish")
         let productsRequest = SKProductsRequest(productIdentifiers: ["com.example.auto-renewable"])
