@@ -85,6 +85,110 @@ class StoreKitTestingExampleTests: XCTestCase {
         waitForExpectations(timeout: 5)
         XCTAssertEqual(transactionStates, [.purchasing, .purchased])
     }
+
+    func testPurchase_whenAskToBuyApproved() {
+        session.askToBuyEnabled = true
+        let expectation = self.expectation(description: "SKPaymentTransaction with purchased state should be received")
+        var transactionStates: [SKPaymentTransactionState] = []
+        let paymentTransactionObserver = PaymentTransactionObserver { [unowned self] queue, transactions in
+            dispatchPrecondition(condition: .onQueue(.main))
+            logger.debug("updating \(transactions.count) transactions.")
+            for transaction in transactions {
+                logger.debug("processing \(transaction.transactionState) transaction with identifier \(String(describing: transaction.transactionIdentifier)).")
+                transactionStates.append(transaction.transactionState)
+                switch transaction.transactionState {
+                case .purchasing:
+                    break
+                case .purchased:
+                    queue.finishTransaction(transaction)
+                    logger.debug("finished transaction with identifier \(String(describing: transaction.transactionIdentifier)).")
+                    expectation.fulfill()
+                case .failed:
+                    if let error = transaction.error {
+                        logger.error("transaction \(String(describing: transaction.transactionIdentifier)) failed with error \(error as NSError).")
+                    }
+                    queue.finishTransaction(transaction)
+                    logger.debug("finished transaction with identifier \(String(describing: transaction.transactionIdentifier)).")
+                case .restored:
+                    XCTFail("SKPaymentTransaction with restored state should not be received")
+                case .deferred:
+                    do {
+                        let pendingTransaction = try XCTUnwrap(self.session.allTransactions().first(where: \.pendingAskToBuyConfirmation))
+                        try self.session.approveAskToBuyTransaction(identifier: pendingTransaction.identifier)
+                        logger.debug("approved transaction with identifier \(pendingTransaction.identifier)")
+                    } catch let error {
+                        XCTFail(String(describing: error))
+                    }
+                @unknown default:
+                    break
+                }
+            }
+        } removedTransactions: { queue, transactions in
+            // Occasionally it might reach here
+        } restoreCompletedTransactionsFinished: { queue in
+            XCTFail(".restoreCompletedTransactionsFinished should not be called")
+        }
+        let product = MockSKProduct()
+        let payment = SKPayment(product: product)
+        let paymentQueue = SKPaymentQueue.default()
+        paymentQueue.add(paymentTransactionObserver)
+        logger.debug("added payment \(payment) to the payment queue.")
+        paymentQueue.add(payment)
+        waitForExpectations(timeout: 5)
+        XCTAssertEqual(transactionStates, [.purchasing, .deferred, .purchased])
+    }
+
+    func testPurchase_whenAskToBuyDeclined() {
+        session.askToBuyEnabled = true
+        let expectation = self.expectation(description: "SKPaymentTransaction with deferred state should be received")
+        var transactionStates: [SKPaymentTransactionState] = []
+        let paymentTransactionObserver = PaymentTransactionObserver { [unowned self] queue, transactions in
+            dispatchPrecondition(condition: .onQueue(.main))
+            logger.debug("updating \(transactions.count) transactions.")
+            for transaction in transactions {
+                logger.debug("processing \(transaction.transactionState) transaction with identifier \(String(describing: transaction.transactionIdentifier)).")
+                transactionStates.append(transaction.transactionState)
+                switch transaction.transactionState {
+                case .purchasing:
+                    break
+                case .purchased:
+                    queue.finishTransaction(transaction)
+                    XCTFail("finished transaction with identifier \(String(describing: transaction.transactionIdentifier)).")
+                case .failed:
+                    if let error = transaction.error {
+                        logger.error("transaction \(String(describing: transaction.transactionIdentifier)) failed with error \(error as NSError).")
+                    }
+                    queue.finishTransaction(transaction)
+                    logger.debug("finished transaction with identifier \(String(describing: transaction.transactionIdentifier)).")
+                case .restored:
+                    XCTFail("SKPaymentTransaction with restored state should not be received")
+                case .deferred:
+                    do {
+                        let pendingTransaction = try XCTUnwrap(self.session.allTransactions().first(where: \.pendingAskToBuyConfirmation))
+                        try self.session.declineAskToBuyTransaction(identifier: pendingTransaction.identifier)
+                        logger.debug("declined transaction with identifier \(pendingTransaction.identifier)")
+                        expectation.fulfill()
+                    } catch let error {
+                        XCTFail(String(describing: error))
+                    }
+                @unknown default:
+                    break
+                }
+            }
+        } removedTransactions: { queue, transactions in
+            // Occasionally it might reach here
+        } restoreCompletedTransactionsFinished: { queue in
+            XCTFail(".restoreCompletedTransactionsFinished should not be called")
+        }
+        let product = MockSKProduct()
+        let payment = SKPayment(product: product)
+        let paymentQueue = SKPaymentQueue.default()
+        paymentQueue.add(paymentTransactionObserver)
+        logger.debug("added payment \(payment) to the payment queue.")
+        paymentQueue.add(payment)
+        waitForExpectations(timeout: 5)
+        XCTAssertEqual(transactionStates, [.purchasing, .deferred])
+    }
 }
 
 private class MockSKProductSubscriptionPeriod: SKProductSubscriptionPeriod {
