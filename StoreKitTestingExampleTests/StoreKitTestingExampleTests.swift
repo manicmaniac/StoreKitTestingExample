@@ -20,9 +20,9 @@ class StoreKitTestingExampleTests: XCTestCase {
         session = try SKTestSession(configurationFileNamed: "Default")
         session.clearTransactions()
         logger.debug("clear all transactions.")
-        // RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.25))
         session.resetToDefaultState()
         session.disableDialogs = true
+        RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.25))
     }
 
     func testRequestProducts() {
