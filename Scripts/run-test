@@ -12,6 +12,5 @@ xcodebuild test \
     -destination 'platform=iOS Simulator,name=iPhone 8' \
     -test-iterations 100 \
     -resultBundlePath "$RESULT_BUNDLE_PATH" \
-    -only-testing StoreKitTestingExampleTests/StoreKitTestingExampleTests/testPurchase \
     -quiet \
     BUILD_DIR=build
