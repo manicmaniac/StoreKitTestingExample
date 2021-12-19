@@ -9,11 +9,10 @@ import OSLog
 import StoreKit
 import StoreKitTest
 import XCTest
-@testable import StoreKitTestingExample
 
-private let logger = Logger(subsystem: "StoreKitTestingExampleTests", category: "StoreKitTestingExampleTests")
+private let logger = Logger(subsystem: "StoreKitTestingExampleTests", category: "AutoRenewableTests")
 
-class StoreKitTestingExampleTests: XCTestCase {
+class AutoRenewableTests: XCTestCase {
     private var session: SKTestSession!
 
     override func setUpWithError() throws {
@@ -71,10 +70,6 @@ class StoreKitTestingExampleTests: XCTestCase {
                     break
                 }
             }
-        } removedTransactions: { queue, transactions in
-            // Occasionally it might reach here
-        } restoreCompletedTransactionsFinished: { queue in
-            XCTFail(".restoreCompletedTransactionsFinished should not be called")
         }
         let product = MockSKProduct()
         let payment = SKPayment(product: product)
@@ -123,10 +118,6 @@ class StoreKitTestingExampleTests: XCTestCase {
                     break
                 }
             }
-        } removedTransactions: { queue, transactions in
-            // Occasionally it might reach here
-        } restoreCompletedTransactionsFinished: { queue in
-            XCTFail(".restoreCompletedTransactionsFinished should not be called")
         }
         let product = MockSKProduct()
         let payment = SKPayment(product: product)
@@ -175,10 +166,6 @@ class StoreKitTestingExampleTests: XCTestCase {
                     break
                 }
             }
-        } removedTransactions: { queue, transactions in
-            // Occasionally it might reach here
-        } restoreCompletedTransactionsFinished: { queue in
-            XCTFail(".restoreCompletedTransactionsFinished should not be called")
         }
         let product = MockSKProduct()
         let payment = SKPayment(product: product)
@@ -220,85 +207,5 @@ private class MockSKProduct: SKProduct {
 
     override var subscriptionPeriod: SKProductSubscriptionPeriod? {
         return MockSKProductSubscriptionPeriod()
-    }
-}
-
-private class PaymentTransactionObserver: NSObject, SKPaymentTransactionObserver {
-    private let paymentQueue: SKPaymentQueue
-    private let updatedTransactionsHandler: ((SKPaymentQueue, [SKPaymentTransaction]) -> Void)?
-    private let removedTransactionsHandler: ((SKPaymentQueue, [SKPaymentTransaction]) -> Void)?
-    private let restoreCompletedTransactionsFinishedHandler: ((SKPaymentQueue) -> Void)?
-
-    init(paymentQueue: SKPaymentQueue = .default(),
-         updatedTransactions: ((SKPaymentQueue, [SKPaymentTransaction]) -> Void)? = nil,
-         removedTransactions: ((SKPaymentQueue, [SKPaymentTransaction]) -> Void)? = nil,
-         restoreCompletedTransactionsFinished: ((SKPaymentQueue) -> Void)? = nil) {
-        self.paymentQueue = paymentQueue
-        self.updatedTransactionsHandler = updatedTransactions
-        self.removedTransactionsHandler = removedTransactions
-        self.restoreCompletedTransactionsFinishedHandler = restoreCompletedTransactionsFinished
-        super.init()
-        paymentQueue.add(self)
-    }
-
-    deinit {
-        paymentQueue.remove(self)
-    }
-
-    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
-        updatedTransactionsHandler?(queue, transactions)
-    }
-
-    func paymentQueue(_ queue: SKPaymentQueue, removedTransactions transactions: [SKPaymentTransaction]) {
-        removedTransactionsHandler?(queue, transactions)
-    }
-
-    func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
-        restoreCompletedTransactionsFinishedHandler?(queue)
-    }
-}
-
-private class ProductsRequestHandler: NSObject, SKProductsRequestDelegate {
-    private let receiveResponseHandler: ((SKProductsRequest, SKProductsResponse) -> Void)?
-    private let finishHandler: ((SKRequest) -> Void)?
-    private let failHandler: ((SKRequest, Error) -> Void)?
-
-    init(receiveResponse: ((SKProductsRequest, SKProductsResponse) -> Void)? = nil,
-         finish: ((SKRequest) -> Void)? = nil,
-         fail: ((SKRequest, Error) -> Void)? = nil) {
-        self.receiveResponseHandler = receiveResponse
-        self.finishHandler = finish
-        self.failHandler = fail
-    }
-
-    func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
-        receiveResponseHandler?(request, response)
-    }
-
-    func requestDidFinish(_ request: SKRequest) {
-        finishHandler?(request)
-    }
-
-    func request(_ request: SKRequest, didFailWithError error: Error) {
-        failHandler?(request, error)
-    }
-}
-
-extension SKPaymentTransactionState: CustomStringConvertible {
-    public var description: String {
-        switch self {
-        case .purchasing:
-            return "purchasing"
-        case .purchased:
-            return "purchased"
-        case .failed:
-            return "failed"
-        case .restored:
-            return "restored"
-        case .deferred:
-            return "deferred"
-        @unknown default:
-            return "unknown (\(rawValue)"
-        }
     }
 }

@@ -11,8 +11,10 @@
 		5B6865032761EB03002CC011 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6865022761EB03002CC011 /* ContentView.swift */; };
 		5B6865052761EB07002CC011 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5B6865042761EB07002CC011 /* Assets.xcassets */; };
 		5B6865082761EB07002CC011 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5B6865072761EB07002CC011 /* Preview Assets.xcassets */; };
-		5B6865122761EB07002CC011 /* StoreKitTestingExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6865112761EB07002CC011 /* StoreKitTestingExampleTests.swift */; };
+		5B6865122761EB07002CC011 /* AutoRenewableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6865112761EB07002CC011 /* AutoRenewableTests.swift */; };
 		5B68652B276212C5002CC011 /* Default.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 5B68652A2761EC53002CC011 /* Default.storekit */; };
+		5B97966C276F32F400CEB542 /* TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B97966B276F32F400CEB542 /* TestHelper.swift */; };
+		5B97966E276F338400CEB542 /* ConsumableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B97966D276F338400CEB542 /* ConsumableTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,8 +34,10 @@
 		5B6865042761EB07002CC011 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5B6865072761EB07002CC011 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		5B68650D2761EB07002CC011 /* StoreKitTestingExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StoreKitTestingExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		5B6865112761EB07002CC011 /* StoreKitTestingExampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitTestingExampleTests.swift; sourceTree = "<group>"; };
+		5B6865112761EB07002CC011 /* AutoRenewableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoRenewableTests.swift; sourceTree = "<group>"; };
 		5B68652A2761EC53002CC011 /* Default.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Default.storekit; sourceTree = "<group>"; };
+		5B97966B276F32F400CEB542 /* TestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelper.swift; sourceTree = "<group>"; };
+		5B97966D276F338400CEB542 /* ConsumableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsumableTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,7 +98,9 @@
 		5B6865102761EB07002CC011 /* StoreKitTestingExampleTests */ = {
 			isa = PBXGroup;
 			children = (
-				5B6865112761EB07002CC011 /* StoreKitTestingExampleTests.swift */,
+				5B6865112761EB07002CC011 /* AutoRenewableTests.swift */,
+				5B97966D276F338400CEB542 /* ConsumableTests.swift */,
+				5B97966B276F32F400CEB542 /* TestHelper.swift */,
 				5B68652A2761EC53002CC011 /* Default.storekit */,
 			);
 			path = StoreKitTestingExampleTests;
@@ -210,7 +216,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B6865122761EB07002CC011 /* StoreKitTestingExampleTests.swift in Sources */,
+				5B6865122761EB07002CC011 /* AutoRenewableTests.swift in Sources */,
+				5B97966C276F32F400CEB542 /* TestHelper.swift in Sources */,
+				5B97966E276F338400CEB542 /* ConsumableTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
